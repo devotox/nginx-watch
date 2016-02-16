@@ -10,10 +10,11 @@
 # USAGE: sh nginx-watch.sh
 
 # Set NGINX directory
-dir=`dirname $0`
+# tar command already has the leading /
+dir='etc/nginx'
 
 # Get initial checksum values
-checksum_initial=`tar -cf - $dir | md5sum | awk '{print $1}'`
+checksum_initial=$(tar --strip-components=2 -C / -cf - $dir | md5sum | awk '{print $1}')
 checksum_now=$checksum_initial
 
 # Start nginx
@@ -24,7 +25,7 @@ nginx
 # the nginx configuration is tested and reloaded on success
 while true
 do
-    checksum_now=`tar -cf - $dir | md5sum | awk '{print $1}'`
+    checksum_now=$(tar --strip-components=2 -C / -cf - $dir | md5sum | awk '{print $1}')
 
     if [ $checksum_initial != $checksum_now ]; then
         echo '[ NGINX ] A configuration file changed. Reloading...'
