@@ -10,7 +10,7 @@
 # USAGE: sh nginx-watch.sh
 
 # Set NGINX directory
-dir='/etc/nginx'
+dir=`dirname $0`
 
 # Get initial checksum values
 checksum_initial=`tar -cf - $dir | md5sum | awk '{print $1}'`
